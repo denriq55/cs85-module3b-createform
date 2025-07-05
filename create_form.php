@@ -57,12 +57,20 @@ function validateEmail($data, $fieldName) {
     }
 }
 
+//Validate and assign form inputs 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $name = validateInput($_POST['fullName'], "Your name");
 $email = validateEmail($_POST['email'], "Your Email");
 $topic = validateInput($_POST['topic'], "Topic");
 $message = validateInput($_POST['message'], "Message");
 
+//Show thank you message with sanitized inputs after hitting submit
+    echo "Thank you  " . htmlspecialchars($name) . "<br>";
+    echo "We received your message about " . htmlspecialchars($topic) . "<br>";
+    echo "We will get back to you at " . htmlspecialchars($email) . ".";
+
 }
+
+
 
 ?>
