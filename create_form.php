@@ -4,23 +4,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Product Contact Form</title>
 </head>
-<form action="create_form.php" method="POST">
-    <label for="fullName">Full name:</label>
-    <input type="text" id="fullName" name="fullName" required><br>
-
-    <label for="email">Email address:</label>
-    <input type="text" id="email" name="email" required><br>
-
-    <label for="topic">Topic:</label>
-    <input type="text" id="topic" name="topic" required><br>
-
-    <label for="message">Message:</label>
-    <textarea id="message" name="message" required></textarea><br>
-
-    <input type="submit" value="Submit Form">
-</form>
 
 <?php
+
+$errorCount = 0;
+$name = '';
+$email = ''; 
+$topic = '';
+$message = '';
+$showForm = true;
+
+
 //Function to validate input
 function validateInput($data, $fieldName) {
     global $errorCount;
@@ -30,12 +24,11 @@ function validateInput($data, $fieldName) {
     if (empty($data)) {
         echo "\"$fieldName\" is a required field.</br>\n";
         ++$errorCount;
-        $userInput = "";
+        return "";
 
     } else {
-        $userInput = trim(stripslashes(($data)));
+        return $userInput = trim(stripslashes(($data)));
     }
-    return($userInput);
 }
 
 //Function to validate email 
@@ -45,7 +38,7 @@ function validateEmail($data, $fieldName) {
     if(empty($data)) {
         echo "\"$fieldName\" is a required field.</br>\n";
         ++$errorCount;
-        $userInput = "";
+        return "";
     } else {
         $userInput = filter_var($data, FILTER_SANITIZE_EMAIL);
 
@@ -65,12 +58,31 @@ $topic = validateInput($_POST['topic'], "Topic");
 $message = validateInput($_POST['message'], "Message");
 
 //Show thank you message with sanitized inputs after hitting submit
-    echo "Thank you  " . htmlspecialchars($name) . "<br>";
-    echo "We received your message about " . htmlspecialchars($topic) . "<br>";
-    echo "We will get back to you at " . htmlspecialchars($email) . ".";
-
+    if ($errorCount === 0) {
+        $showForm = false;
+        echo "Thank you  " . htmlspecialchars($name) . "<br>";
+        echo "We received your message about " . htmlspecialchars($topic) . "<br>";
+        echo "We will get back to you at " . htmlspecialchars($email) . ".";
+    }
+    else {
+        echo "Please fix the error in your submission.";
+    }
 }
-
-
-
 ?>
+<?php if ($showForm): ?>
+<form action="create_form.php" method="POST">
+    <label for="fullName">Full name:</label>
+    <input type="text" id="fullName" name="fullName" required><br>
+
+    <label for="email">Email address:</label>
+    <input type="text" id="email" name="email" required><br>
+
+    <label for="topic">Topic:</label>
+    <input type="text" id="topic" name="topic" required><br>
+
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" required></textarea><br>
+
+    <input type="submit" value="Submit Form">
+</form>
+<?php endif; ?>
