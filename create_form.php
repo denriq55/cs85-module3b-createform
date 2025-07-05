@@ -52,6 +52,7 @@ function validateEmail($data, $fieldName) {
 
 //Validate and assign form inputs 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    var_dump($_POST);
 $name = validateInput($_POST['fullName'], "Your name");
 $email = validateEmail($_POST['email'], "Your Email");
 $topic = validateInput($_POST['topic'], "Topic");
@@ -68,6 +69,14 @@ $message = validateInput($_POST['message'], "Message");
         echo "Please fix the error in your submission.";
     }
 }
+/*Reflections:
+I expected $_POST to contain all user inputs and it did with extras such as 
+the type of input(all strings), and that they are inside an array.
+I was also surprised that HTML validation prevents blank submission before PHP runs.
+I had to use a boolean to show/hide the form otherwise, it always showed even after
+a successful submission. 
+
+*/
 ?>
 <?php if ($showForm): ?>
 <form action="create_form.php" method="POST">
